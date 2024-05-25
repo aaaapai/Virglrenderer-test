@@ -18,7 +18,7 @@ jobs:
       ANDROID_NDK_HOME: "${ANDROID_SDK_ROOT}/ndk-bundle"
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup
         run: |
@@ -29,11 +29,6 @@ jobs:
           cp libdrm.pc /tmp/build/lib/pkgconfig/
           wget https://github.com/Vera-Firefly/libepoxy/raw/master/include/EGL/eglplatform.h -P EGL
           wget https://github.com/Vera-Firefly/libepoxy/raw/master/include/KHR/khrplatform.h -P KHR
-
-      - name: Download NDK
-        run: |
-          wget https://dl.google.com/android/repository/android-ndk-r26b-linux.zip
-          unzip android-ndk-r26b-linux.zip
 
       - name: Build libepoxy
         run: |
@@ -64,7 +59,7 @@ jobs:
           perl -pi -e 's/libepoxy.so.0/libepoxy_0.so/g' *.so
           perl -pi -e 's/libvirglrenderer.so.1/libvirglrenderer_1.so/g' *.so ../bin/*
       - name: Upload libraries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: build_${{matrix.arch}}
           path: /tmp/build
