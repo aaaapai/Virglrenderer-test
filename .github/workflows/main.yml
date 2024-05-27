@@ -13,7 +13,7 @@ jobs:
 
     name: "Build ${{matrix.arch}}"
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       ANDROID_NDK_HOME: "${ANDROID_SDK_ROOT}/ndk-bundle"
 
@@ -23,8 +23,8 @@ jobs:
       - name: Setup
         run: |
           sudo apt update
-          sudo apt install -y meson libxrandr-dev libxxf86vm-dev libxcb-*-dev libx11-xcb-dev libxfixes-dev libdrm-dev libx11-dev
-          pip3 install mako ninja
+          sudo apt install -y libxrandr-dev libxxf86vm-dev libxcb-*-dev libx11-xcb-dev libxfixes-dev libdrm-dev libx11-dev
+          pip3 install mako meson ninja
           mkdir -p /tmp/build/lib/pkgconfig
           cp libdrm.pc /tmp/build/lib/pkgconfig/
           wget https://github.com/Vera-Firefly/libepoxy/raw/master/include/EGL/eglplatform.h -P EGL
@@ -34,19 +34,19 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/aaaapai/libepoxy-1.git
           cd libepoxy-1
-          meson "build-android-${{matrix.arch}}" \
+          meson "build-android" \
             --prefix=/tmp/build \
             --cross-file "../android-${{matrix.arch}}" \
-          ninja -C "build-android-${{matrix.arch}}" install
+          ninja -C "build-android" install
 
       - name: Build virglrenderer
         run: |
-          meson "build-android-${{matrix.arch}}" \
+          meson "build-android" \
             --prefix=/tmp/build \
             --cross-file "android-${{matrix.arch}}" \
             -Dplatforms=egl \
             -Dc_args='-Wno-error=gnu-offsetof-extensions'
-          ninja -C "build-android-${{matrix.arch}}" install
+          ninja -C "build-android" install
           cp "build-android-${{matrix.arch}}/vtest/libvirgl_test_server.so" /tmp/build/lib/
 
       - name: Change suffix
