@@ -27,8 +27,8 @@ jobs:
           pip3 install mako ninja
           mkdir -p /tmp/build/lib/pkgconfig
           cp libdrm.pc /tmp/build/lib/pkgconfig/
-          wget https://github.com/aaaapai/libepoxy-1/raw/master/include/EGL/eglplatform.h -P EGL
-          wget https://github.com/aaaapai/libepoxy-1/raw/master/include/KHR/khrplatform.h -P KHR
+          wget https://github.com/Vera-Firefly/libepoxy/raw/master/include/EGL/eglplatform.h -P EGL
+          wget https://github.com/Vera-Firefly/libepoxy/raw/master/include/KHR/khrplatform.h -P KHR
 
       - name: Build libepoxy
         run: |
