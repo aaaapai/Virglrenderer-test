@@ -34,19 +34,19 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/aaaapai/libepoxy-1.git
           cd libepoxy-1
-          meson "build-android" \
+          meson setup "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
             --cross-file "../android-${{matrix.arch}}" \
-          ninja -C "build-android" install
+          ninja -C "build-android-${{matrix.arch}}" install
 
       - name: Build virglrenderer
         run: |
-          meson "build-android" \
+          meson setup "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
             --cross-file "android-${{matrix.arch}}" \
             -Dplatforms=egl \
             -Dc_args='-Wno-error=gnu-offsetof-extensions'
-          ninja -C "build-android" install
+          ninja -C "build-android-${{matrix.arch}}" install
           cp "build-android-${{matrix.arch}}/vtest/libvirgl_test_server.so" /tmp/build/lib/
 
       - name: Change suffix
