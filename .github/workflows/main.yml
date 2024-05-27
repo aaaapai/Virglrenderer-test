@@ -13,7 +13,7 @@ jobs:
 
     name: "Build ${{matrix.arch}}"
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     env:
       ANDROID_NDK_HOME: "${ANDROID_SDK_ROOT}/ndk-bundle"
 
