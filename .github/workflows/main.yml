@@ -32,11 +32,12 @@ jobs:
 
       - name: Build libepoxy
         run: |
-          git clone --depth 1 https://github.com/aaaapai/libepoxy-1.git
+          git clone -b test --depth 1 https://github.com/aaaapai/libepoxy-1.git
           cd libepoxy-1
           meson "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
-            --cross-file "../android-${{matrix.arch}}"
+            --cross-file "../android-${{matrix.arch}}" \
+            -Dc_link_args='-landroid -lEGL -lGLESv2'
           ninja -C "build-android-${{matrix.arch}}" install
 
       - name: Build virglrenderer
