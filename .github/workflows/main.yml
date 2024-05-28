@@ -37,7 +37,7 @@ jobs:
           meson "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
             --cross-file "../android-${{matrix.arch}}" \
-            -Dc_link_args='-landroid -lGL -lEGL -lGLESv2'
+            -Dc_link_args='-landroid -ldl -lGL -lEGL -lGLESv2'
           ninja -C "build-android-${{matrix.arch}}" install
 
       - name: Build virglrenderer
