@@ -27,8 +27,9 @@ jobs:
           pip3 install mako meson ninja
           mkdir -p /tmp/build/lib/pkgconfig
           cp libdrm.pc /tmp/build/lib/pkgconfig/
-          wget https://github.com/aaaapai/libepoxy-1/raw/master/include/EGL/eglplatform.h -P EGL
-          wget https://github.com/aaaapai/libepoxy-1/raw/master/include/KHR/khrplatform.h -P KHR
+          wget https://github.com/aaaapai/libepoxy-1/raw/test/include/EGL/eglplatform.h -P EGL
+          wget https://github.com/aaaapai/libepoxy-1/raw/test/include/KHR/khrplatform.h -P KHR
+          wget https://github.com/aaaapai/libepoxy-1/raw/test/include/GLES3/gl3platform.h -P GL32
 
       - name: Build libepoxy
         run: |
@@ -37,7 +38,7 @@ jobs:
           meson "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
             --cross-file "../android-${{matrix.arch}}" \
-            -Dc_link_args='-landroid -ldl -lGL -lEGL -lGLESv2'
+            -Dc_link_args='-landroid -lEGL -lGLESv2 -lGLESv3'
           ninja -C "build-android-${{matrix.arch}}" install
 
       - name: Build virglrenderer
