@@ -33,7 +33,7 @@ jobs:
 
       - name: Build libepoxy
         run: |
-          git clone -b test --depth 1 https://github.com/aaaapai/libepoxy-1.git
+          git clone -b 2 --depth 1 https://github.com/aaaapai/libepoxy-1.git
           cd libepoxy-1
           meson "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
