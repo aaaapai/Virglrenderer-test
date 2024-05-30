@@ -38,6 +38,7 @@ jobs:
           meson "build-android-${{matrix.arch}}" \
             --prefix=/tmp/build \
             --cross-file "../android-${{matrix.arch}}" \
+            -Degl=yes -Dglx=no -Dx11=false
             -Dc_link_args='-landroid -lEGL -lGLESv2'
           ninja -C "build-android-${{matrix.arch}}" install
 
