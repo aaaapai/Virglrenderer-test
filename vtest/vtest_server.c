@@ -157,9 +157,9 @@ while (__AFL_LOOP(1000)) {
    if (server.do_fork) {
       vtest_server_set_signal_child();
    } else {
-   #if _EXPORT_MAIN == 1
+#if _EXPORT_MAIN == 1
       vtest_server_set_signal_segv();
-   #endif
+#endif
    }
 
    vtest_server_run();
@@ -315,11 +315,11 @@ static void vtest_server_getenv(void)
    server.use_egl_surfaceless = getenv("VTEST_USE_EGL_SURFACELESS") != NULL;
    server.use_gles = getenv("VTEST_USE_GLES") != NULL;
    server.render_device = getenv("VTEST_RENDERNODE");
+   server.use_compat_profile = getenv("VTEST_USE_COMPATIBILITY_PROFILE");
    const char *socket_name = getenv("VTEST_SOCKET_NAME");
    if (socket_name) {
        server.socket_name = socket_name;
    }
-   server.use_compat_profile = getenv("VTEST_USE_COMPATIBILITY_PROFILE");
 }
 
 static void handler(int sig, siginfo_t *si, void *unused)
@@ -655,6 +655,7 @@ static void vtest_server_run(void)
    free(ptrStr);
 
    int dimensions[5] = {0,0,0,0}; // x, y, w, h
+
    while (run) {
       if (server.will_swap_buffers) {
          server.will_swap_buffers = false;
