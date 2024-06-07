@@ -65,6 +65,7 @@ int vrend_winsys_init(uint32_t flags, int preferred_fd)
       if (preferred_fd > 0 && !gbm)
          return -1;
 #endif
+
       egl = virgl_egl_init(gbm, flags & VIRGL_RENDERER_USE_SURFACELESS,
                            flags & VIRGL_RENDERER_USE_GLES);
       if (!egl) {
@@ -214,7 +215,7 @@ int vrend_winsys_get_attrs_for_texture(uint32_t tex_id, uint32_t format, int *fo
                                        bool *has_dmabuf_export,
                                        int *planes, uint64_t *modifiers)
 {
-#if defined(ENABLE_GBM) && HAVE_EGL_GBM_H == 1
+#if defined(HAVE_EPOXY_EGL_H) && HAVE_EGL_GBM_H == 1
    if (use_context == CONTEXT_EGL)
       return virgl_egl_get_attrs_for_texture(egl, tex_id, format, fourcc,
                                              has_dmabuf_export,
@@ -233,7 +234,7 @@ int vrend_winsys_get_attrs_for_texture(uint32_t tex_id, uint32_t format, int *fo
 
 int vrend_winsys_get_fd_for_texture(uint32_t tex_id, int *fd)
 {
-#if defined(ENABLE_GBM) && HAVE_EGL_GBM_H == 1
+#if defined(HAVE_EPOXY_EGL_H) && HAVE_EGL_GBM_H == 1
    if (!egl)
       return -1;
 
@@ -247,7 +248,7 @@ int vrend_winsys_get_fd_for_texture(uint32_t tex_id, int *fd)
 
 int vrend_winsys_get_fd_for_texture2(uint32_t tex_id, int *fd, int *stride, int *offset)
 {
-#if defined(ENABLE_GBM) && HAVE_EGL_GBM_H == 1
+#if defined(HAVE_EPOXY_EGL_H) && HAVE_EGL_GBM_H == 1
    if (!egl)
       return -1;
 
