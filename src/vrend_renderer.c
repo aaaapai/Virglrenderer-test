@@ -1894,13 +1894,7 @@ static bool vrend_link_separable_shader(struct vrend_sub_context *sub_ctx,
       bool dual_src_linked = util_blend_state_is_dual(&sub_ctx->blend_state, 0);
       if (dual_src_linked) {
          if (has_feature(feat_dual_src_blend)) {
-            if (!vrend_state.use_gles) {
-               glBindFragDataLocationIndexed(shader->program_id, 0, 0, "fsout_c0");
-               glBindFragDataLocationIndexed(shader->program_id, 0, 1, "fsout_c1");
-            } else {
-               glBindFragDataLocationIndexedEXT(shader->program_id, 0, 0, "fsout_c0");
-               glBindFragDataLocationIndexedEXT(shader->program_id, 0, 1, "fsout_c1");
-            }
+         
          } else {
             vrend_report_context_error(sub_ctx->parent, VIRGL_ERROR_CTX_ILLEGAL_DUAL_SRC_BLEND, 0);
          }
@@ -2038,30 +2032,12 @@ static struct vrend_linked_shader_program *add_shader_program(struct vrend_sub_c
       sprog->dual_src_linked = util_blend_state_is_dual(&sub_ctx->blend_state, 0);
       if (sprog->dual_src_linked) {
          if (has_feature(feat_dual_src_blend)) {
-            /*
-            if (!vrend_state.use_gles) {
-               glBindFragDataLocationIndexed(fs_id, 0, 0, "fsout_c0");
-               glBindFragDataLocationIndexed(fs_id, 0, 1, "fsout_c1");
-            } else {
-               glBindFragDataLocationIndexedEXT(fs_id, 0, 0, "fsout_c0");
-               glBindFragDataLocationIndexedEXT(fs_id, 0, 1, "fsout_c1");
-            }
-            */
+         
          } else {
             vrend_report_context_error(sub_ctx->parent, VIRGL_ERROR_CTX_ILLEGAL_DUAL_SRC_BLEND, 0);
          }
-      } else if (!vrend_state.use_gles && has_feature(feat_dual_src_blend)) {
-         /* On GLES without dual source blending we emit the layout directly in the shader
-          * so there is no need to define the binding here */
-         /*
-         for (int i = 0; i < fs->sel->sinfo.num_outputs; ++i) {
-            if (fs->sel->sinfo.fs_output_layout[i] >= 0) {
-               char buf[64];
-               snprintf(buf, sizeof(buf), "fsout_c%d", fs->sel->sinfo.fs_output_layout[i]);
-               glBindFragDataLocationIndexed(fs_id, fs->sel->sinfo.fs_output_layout[i], 0, buf);
-            }
-         }
-         */
+      } else {
+      
       }
    } else
       sprog->dual_src_linked = false;
@@ -8631,12 +8607,9 @@ static int vrend_resource_alloc_texture(struct vrend_resource *gr,
          internalformat = tex_conv_table[format].internalformat;
          glformat = tex_conv_table[format].glformat;
          gltype = tex_conv_table[format].gltype;
-
-         virgl_error("unknown format is %d\n", pr->format);
-         glBindTexture(gr->target, 0);
-         return EINVAL;
-         //glBindTexture(gr->target, 0);
-         //return EINVAL;
+         virgl_error("Unknown format is %d\n", pr->format);
+         // glBindTexture(gr->target, 0);
+         // }return EINVAL;
       }
 
       if (pr->nr_samples > 1) {
@@ -9490,7 +9463,7 @@ static void do_readpixels(struct vrend_resource *res,
    if (shouldSetTextureID) {
       char *tidPtr = getenv("VTEST_TEXTUREID_PTR");
       if (tidPtr) {
-         *((int *)atol(tidPtr)) = res->gl_id;
+         *((int *)atol(tidPtr)) = res->id;
          --shouldSetTextureID;
       }
    }
