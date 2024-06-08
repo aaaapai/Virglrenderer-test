@@ -26,7 +26,7 @@ project(
    version: '1.0.1',
    license : 'MIT',
    meson_version : '>= 0.55',
-   default_options : ['buildtype=debugoptimized', 'b_ndebug=if-release',
+   default_options : ['buildtype=debugoptimized', 'b_ndebug=true',
                       'warning_level=3', 'c_std=gnu17']
 )
 
