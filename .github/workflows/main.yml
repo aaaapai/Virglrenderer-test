@@ -13,7 +13,7 @@ jobs:
 
     name: "Build ${{matrix.arch}}"
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       ANDROID_NDK_HOME: "${ANDROID_SDK_ROOT}/ndk-bundle"
 
@@ -24,7 +24,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y libxrandr-dev libxxf86vm-dev libxcb-*-dev libx11-xcb-dev libxfixes-dev libdrm-dev libx11-dev libgl1-mesa-dev
-          pip3 install mako meson ninja
+          python3 -m pip install mako meson ninja
           mkdir -p /tmp/build/lib/pkgconfig
           cp libdrm.pc /tmp/build/lib/pkgconfig/
           wget https://github.com/aaaapai/libepoxy-1/raw/test/include/EGL/eglplatform.h -P EGL
