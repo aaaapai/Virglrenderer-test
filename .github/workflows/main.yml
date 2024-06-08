@@ -39,7 +39,7 @@ jobs:
             --prefix=/tmp/build \
             --cross-file "../android-${{matrix.arch}}" \
             -Degl=yes -Dglx=no -Dx11=false \
-            -Dc_link_args='-landroid -lEGL -lGLESv2'
+            -Dc_link_args='-ldl -landroid -lEGL -lGLESv2'
           ninja -C "build-android-${{matrix.arch}}" install
 
       - name: Build virglrenderer
