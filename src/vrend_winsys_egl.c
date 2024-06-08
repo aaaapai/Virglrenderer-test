@@ -51,7 +51,7 @@
 #include "vrend_winsys.h"
 #include "vrend_winsys_egl.h"
 #include "virgl_hw.h"
-#if defined(ENABLE_GBM) && HAVE_EGL_GBM_H == 1
+#if HAVE_EGL_GBM_H == 1
 #include "vrend_winsys_gbm.h"
 #endif
 #include "virgl_util.h"
@@ -285,13 +285,6 @@ static bool virgl_egl_get_display(struct virgl_egl *egl)
       return false;
 #endif
 
-   if (!has_bits(egl->extension_bits,
-                 EGL_EXT_PLATFORM_BASE |
-                 EGL_EXT_PLATFORM_DEVICE |
-                 EGL_EXT_DEVICE_ENUMERATION |
-                 EGL_EXT_DEVICE_QUERY))
-      return false;
-
 #if HAVE_EGL_GBM_H == 1
    device = virgl_egl_get_device(egl);
 
@@ -331,6 +324,7 @@ struct virgl_egl *virgl_egl_init(EGLNativeDisplayType display_id, bool surfacele
    const char *extensions;
    struct virgl_egl *egl;
 
+   const char *client_extensions = eglQueryString (NULL, EGL_EXTENSIONS);
    bool has_egl_base = virgl_egl_has_extension_in_string(client_extensions, "EGL_EXT_platform_base");
 
    egl = calloc(1, sizeof(struct virgl_egl));
@@ -352,10 +346,7 @@ struct virgl_egl *virgl_egl_init(EGLNativeDisplayType display_id, bool surfacele
    extensions = eglQueryString(NULL, EGL_EXTENSIONS);
    if (!virgl_egl_add_extensions(egl, extensions))
       goto fail;
-
 #if HAVE_EGL_GBM_H == 1
-   const char *client_extensions = eglQueryString (NULL, EGL_EXTENSIONS);
-
 #ifdef ENABLE_MINIGBM_ALLOCATION
    if (virgl_egl_get_display(egl)) {
      /* Make -Wdangling-else happy. */
@@ -383,7 +374,7 @@ struct virgl_egl *virgl_egl_init(EGLNativeDisplayType display_id, bool surfacele
 #endif
 
    if (!egl->egl_display) {
-#if defined(ENABLE_GBM) && HAVE_EGL_GBM_H == 1
+#if HAVE_EGL_GBM_H == 1
       /*
        * Don't fallback to the default display if the fd provided by (*get_drm_fd)
        * can't be used.
