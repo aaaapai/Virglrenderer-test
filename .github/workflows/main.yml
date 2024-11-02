@@ -18,12 +18,12 @@ jobs:
       ANDROID_NDK_HOME: "${ANDROID_SDK_ROOT}/ndk-bundle"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@main
 
       - name: Setup
         run: |
           sudo apt update
-          sudo apt install -y libxrandr-dev libxxf86vm-dev libxcb-*-dev libx11-xcb-dev libxfixes-dev libdrm-dev libx11-dev
+          sudo apt install -y libxrandr-dev libxxf86vm-dev libxcb-*-dev libx11-xcb-dev libxfixes-dev libx11-dev
           pip3 install mako meson ninja
           mkdir -p /tmp/build/lib/pkgconfig
           cp libdrm.pc /tmp/build/lib/pkgconfig/
@@ -49,7 +49,7 @@ jobs:
             --prefix=/tmp/build \
             --cross-file "android-${{matrix.arch}}" \
             -Dplatforms=egl \
-            -Dc_link_args='-ldl -landroid -lEGL -lGLESv2' \
+            -Dc_link_args='-ldl -landroid -lEGL -lGLESv3' \
             -Dc_args='-Wno-error=gnu-offsetof-extensions'
           ninja -C "build-android-${{matrix.arch}}" install
           cp "build-android-${{matrix.arch}}/vtest/libvirgl_test_server.so" /tmp/build/lib/
@@ -64,7 +64,7 @@ jobs:
           perl -pi -e 's/libvirglrenderer.so.1/libvirglrenderer_1.so/g' *.so ../bin/*
           
       - name: Upload libraries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@main
         with:
           name: build_${{matrix.arch}}
           path: /tmp/build
